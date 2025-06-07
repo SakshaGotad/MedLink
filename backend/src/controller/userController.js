@@ -1,3 +1,5 @@
+const user = require('../models/user')
+// const User = require('../models/user')
 const fetchUserdata = async (req,res) =>{
     return User.findOne({ email: req.userEmail, role: req.userRole })
     .then(doc => {
@@ -82,8 +84,33 @@ const deleteUser = async(req, res)=>{
 }
 
 
+const getallDoctors = async(req, res)=>{
+    try {
+        const doctor = await user.findOne({role:"doctor"});
+
+        return res.status(200)
+        .json({_id: doctor._id,
+            name:doctor.name,
+            specializaton:doctor.profile.specialization,
+            address:doctor.profile.address,
+        })
+    } catch (error) {
+        
+    }
+}
+
 module.exports ={
     fetchUserdata ,
     updateUser,
     deleteUser
 }
+
+
+
+// 2025-04-07 2024-04-07 2024-04-07 2023-02-07 2025-01-07 
+
+// if(Date.year < date2.year){
+//     if( Date.year.month < date2.year.month){
+//         Date.push(    )
+//     }x`
+// }

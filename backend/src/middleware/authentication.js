@@ -20,6 +20,21 @@ function verifyAccessToken(req, res, next) {
     next()
 }
 
+
+function checkIsPatient(req, res, next) {
+    try {
+        if(req.userRole != patient){
+            res.json({message:"not a patient"})
+        }
+    } catch (error) {
+        return res.status(400)
+        .json({
+            message:"error in patient middleware"
+        })
+    }
+}
+
 module.exports = {
     verifyAccessToken
+    , checkIsPatient
 }
