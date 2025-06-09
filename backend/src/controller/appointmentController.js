@@ -3,8 +3,11 @@ const Appointment = require('../models/appointment');
 
 const createAppointment = async(req, res)=>{
     try {
-        const {doctorId , patient, date, status} = req.body;
-
+        const newAppointment = req.body
+          
+        if(!newAppointment.dateTime) {
+            throw "invalid date time"
+        }
         const resp = await Appointment.create(req.body);
         
     } catch (error) {
