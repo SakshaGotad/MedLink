@@ -5,13 +5,40 @@ const createAppointment = async(req, res)=>{
     try {
         const newAppointment = req.body
           
+        return Promise.resolve()
+    .then(() => {
         if(!newAppointment.dateTime) {
             throw "invalid date time"
         }
-        const resp = await Appointment.create(req.body);
+    })
+    .then(() => getEpochMilliSeconds(newAppointment.dateTime))
+    .then((milliseconds) => checkIsDateTimeFuture(milliseconds))
+    .then((milliseconds) => { 
+        newAppointment.dateTime = milliseconds
+        return  Appointment.create(newAppointment)
+    })
+    .then(doc => {
+        return res.status(201).json({
+            message: "appointment create successful",
+            error: null,
+            data: { ...doc._doc }
+         })
+    })
+    .catch(error => {
+        console.log("===error : ", error)
+        return res.status(422).json({
+            message: "appointment create failed",
+            error: error,
+            data: null
+         })
+    })
         
     } catch (error) {
-        return res.
+        return res.status(422).json({
+            message: "appointment create failed",
+            error: error,
+            data: null
+         })
     }
 }
 
