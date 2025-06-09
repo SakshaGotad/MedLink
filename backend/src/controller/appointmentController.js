@@ -42,4 +42,72 @@ const createAppointment = async(req, res)=>{
     }
 }
 
-module.exports={createAppointment};
+
+const fetchAppointments=(req, res)=>{
+    if(req.params.role == "doctor") {
+        return User.findOne({ email: req.userEmail, role: "doctor" })
+        .then(doctor => {
+            if(!doctor) {
+                throw "not found"
+            }
+            return Appointment.find({ doctorId: new mongoose.Types.ObjectId(doctor._id) })
+        })
+        .then(appts => {
+            return res.status(200).json({
+                message: "appointments fetch successful",
+                error: null,
+                data: appts
+            })
+        })
+        .catch(error => {
+            console.log("=== error", error)
+            return res.status(422).json({
+                message: "appointment fetch failed",
+                error: error,
+                data: null
+            })
+        })
+
+    
+        
+}
+if(req.params.role == "patient") {
+    return User.findOne({ email: req.userEmail, role: "patient" })
+    .then(patient => {
+        if(!patient) {
+            throw "not found"
+        }
+        return Appointment.find({ patientId: new mongoose.Types.ObjectId(patient._id) })
+        .populate("doctorId")
+        .exec()
+    })
+    .then(appts => {
+        return res.status(200).json({
+            message: "appointments fetch successful",
+            error: null,
+            data: appts
+        })
+    })
+    .catch(error => {
+        console.log("=== error", error)
+        return res.status(422).json({
+            message: "appointment fetch failed",
+            error: error,
+            data: null
+        })
+    })
+
+    
+}
+
+return res.status(404).json({
+    message: "appointment fetch failed",
+    error: "not found",
+    data: null
+})
+}
+
+module.exports={createAppointment ,
+    fetchAppointments,
+    
+};
