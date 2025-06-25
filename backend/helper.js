@@ -1,4 +1,24 @@
 const nodemailer = require('nodemailer');
+const appwriteSdk = require("node-appwrite")
+const path = require("path")
+
+
+function setupAppWrite() {
+    const client = new appwriteSdk.Client()
+  
+  
+    client.setEndpoint(process.env.APPWRITE_ENDPOINT)
+    .setProject(process.env.APPWRITE_PROJECT)
+    .setKey(process.env.APPWRITE_KEY)
+  
+    return client
+  }
+  
+  function getReportFilePath(patientId, appointmentId, fileName) {
+    return patientId + "-" + Math.ceil(Math.random() *  1000) + "-" +  path.extname(fileName)
+  }
+  
+  
 
 function sendMail(recieverEmailid, subject , body){
     const transporter = nodemailer.createTransport({
@@ -53,8 +73,15 @@ function checkIsDateTimeFuture(milliseconds) {
   
     return milliseconds
   }
+
+  function getReportFilePath(patientId, appointmentId, fileName) {
+    return patientId + "-" + Math.ceil(Math.random() *  1000) + "-" +  path.extname(fileName)
+  }
+
 module.exports = {
     sendMail,
     getEpochMiliSecond,
-    checkIsDateTimeFuture
+    checkIsDateTimeFuture,
+    setupAppWrite,
+    getReportFilePath
 }

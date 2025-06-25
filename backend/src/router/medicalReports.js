@@ -1,4 +1,4 @@
-
+const MedicalReports = require('../models/MedicalReports');
 const medicalReports =async(req, res)=>{
     
     const awStorage = new appwriteSdk.Storage(setupAppWrite());
