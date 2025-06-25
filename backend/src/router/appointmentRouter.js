@@ -5,3 +5,5 @@ const { checkIsPatient, verifyAccessToken } = require('../middleware/authenticat
 
 
 router.post('/appointment',verifyAccessToken, checkIsPatient, appointmentController.createAppointment);
+
+modoule.exports = router;
