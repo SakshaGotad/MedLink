@@ -34,3 +34,5 @@ const medicalReports =async(req, res)=>{
             })
 
 }
+
+module.exports = {medicalReports};
