@@ -6,7 +6,7 @@ const getConnection = require('./src/utils/getConnection');
 const authRoutes = require('./src/router/authRouter');
 const userRoutes = require('./src/router/userRouter');
 const appointmentRouter = require("./src/router/appointmentRouter");
-const medicalReportsRouter = require("./src/router/medicalReports");
+const medicalReportsRouter = require("./src/router/medicalReportRouter");
 // Load environment variables
 dotenv.config();
 

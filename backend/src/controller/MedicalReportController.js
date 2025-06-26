@@ -1,7 +1,7 @@
 const MedicalReports = require('../models/MedicalReports');
 const {setupAppWrite,getReportFilePath} = require('../../helper')
 const upload = require("../middleware/storage")
-const { verifyAccessToken, checkIsPatient } = require("../middleware/authentication");
+// const { verifyAccessToken, checkIsPatient } = require("../middleware/authentication");
 const Router = require("express").Router();
 const appwriteSdk = require("node-appwrite")
 const { InputFile } = require("node-appwrite/file")
