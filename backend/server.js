@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const Router = require('express').Router();
-const getConnection = require('./getConnection');
-const authRoutes = require('../router/authRouter');
-const userRoutes = require('../router/userRouter');
-const appointmentRouter = require("../routes/appointment");
-const medicalReportsRouter = require("../router/medicalReports");
+
+const getConnection = require('./src/utils/getConnection');
+const authRoutes = require('./src/router/authRouter');
+const userRoutes = require('./src/router/userRouter');
+const appointmentRouter = require("./src/router/appointmentRouter");
+const medicalReportsRouter = require("./src/router/medicalReports");
 // Load environment variables
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.use(express.json());
 // all routes 
 app.use('/auth', authRoutes);
 app.use('/user' , userRoutes);
-pp.use("/appointments", appointmentRouter);
+app.use("/appointments", appointmentRouter);
 app.use("/reports", medicalReportsRouter);
 
 // Error handling middleware
