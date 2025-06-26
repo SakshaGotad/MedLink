@@ -5,7 +5,7 @@ const services = [
     id: 1,
     title: 'Easy to use with us',
     description: 'Lorem ipsum dolor sit amet. Risus dapibus eget id aliquam sit mi nibh.',
-    highlight: true,
+  
   },
   {
     id: 2,
@@ -51,11 +51,8 @@ const ServiceSection = () => {
           {services.map((service) => (
             <div
               key={service.id}
-              className={`rounded-md p-6 min-h-[220px] flex flex-col justify-between ${
-                service.highlight ? 'bg-[#8141dc]' : 'bg-[#1c066b]'
-              }`}
-            >
-              <div>
+              className= "rounded-md p-6 min-h-[220px] flex flex-col justify-between bg-[#1c066b] hover:bg-[#51496f] transition ease-in-out  duration-300 ">
+             <div>
                 <div className="bg-[#7c5fe9] text-white text-sm w-8 h-8 flex items-center justify-center rounded-md font-bold mb-4">
                   {service.id}
                 </div>
