@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const  Otp = require('../models/emailOtpVerification')
 const jwt= require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -20,6 +21,30 @@ const signup = async (req, res) => {
       return res.status(200).json({ message: 'OTP sent to email' });
     } catch (error) {
       return res.status(500).json({ error: 'Signup failed', details: error });
+    }
+  };
+
+  const verifyOtp = async (req, res) => {
+    try {
+      const { email, otp } = req.body;
+      const otpDoc = await Otp.findOne({ email });
+  
+      if (!otpDoc || otpDoc.otp !== otp) {
+        return res.status(400).json({ error: 'Invalid OTP' });
+      }
+  
+      const newUser = await User.create({
+        email,
+        password: otpDoc.hashedPassword,
+        role: otpDoc.role,
+        verifiedEmail: true,
+      });
+  
+      await Otp.deleteOne({ email });
+  
+      return res.status(201).json({ message: 'User created', data: newUser });
+    } catch (error) {
+      return res.status(500).json({ error: 'Verification failed', details: error });
     }
   };
 
@@ -165,4 +190,4 @@ const emailVerifySubmit = async(req, res)=>{
          })
     })
 }
-module.exports ={signup, login , logout , emailVerifyReq , emailVerifySubmit}
+module.exports ={signup,verifyOtp, login , logout , emailVerifyReq , emailVerifySubmit}
