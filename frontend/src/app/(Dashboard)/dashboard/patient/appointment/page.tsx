@@ -2,7 +2,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Dialog } from '@headlessui/react';
-import { CalendarDays, Clock, User } from 'lucide-react';
+// import { CalendarDays, Clock, User } from 'lucide-react';
+import DatePicker from '@/components/DatePicker';
+import { User } from 'lucide-react';
+import DateTimePicker from '@/components/DateTimePicker';
 
 const doctors = [
   { id: '1', name: 'Dr. Aditi Rao', fee: 900 },
@@ -12,14 +15,15 @@ const doctors = [
 export default function AppointmentPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedTime, setSelectedTime] = useState('');
+    
   const router = useRouter();
 
   const handleDone = () => {
     // Normally you'd call API here to create appointment
     setIsOpen(false);
-    router.push('/dashboard'); // redirect after "done"
+    router.push('/dashboard/patient'); // redirect after "done"
   };
 
   const fee = doctors.find((doc) => doc.id === selectedDoctor)?.fee || 0;
@@ -62,31 +66,12 @@ export default function AppointmentPage() {
             </div>
 
             {/* Date */}
-            <div>
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1 mb-1">
-                <CalendarDays size={16} /> Date
-              </label>
-              <input
-                type="date"
-                className="w-full border px-3 py-2 rounded-lg"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-
-            {/* Time Slot */}
-            <div>
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-1 mb-1">
-                <Clock size={16} /> Time Slot
-              </label>
-              <input
-                type="time"
-                className="w-full border px-3 py-2 rounded-lg"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-            </div>
-
+            <DateTimePicker
+  selectedDate={selectedDate}
+  onDateSelect={setSelectedDate}
+  selectedTime={selectedTime}
+  onTimeSelect={setSelectedTime}
+/>
             {/* Fee */}
             <div className="text-right font-medium text-indigo-600">
               Fee: ₹{fee}

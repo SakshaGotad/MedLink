@@ -1,7 +1,7 @@
 'use client';
 
 import * as Popover from '@radix-ui/react-popover';
-import { Calendar } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { CalendarDays } from 'lucide-react';
 
@@ -21,7 +21,7 @@ export default function DatePicker({ selected, onSelect }: {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content className="bg-white rounded-lg shadow-lg p-4 z-50" sideOffset={5}>
-          <Calendar
+          <DayPicker
             mode="single"
             selected={selected}
             onSelect={onSelect}
