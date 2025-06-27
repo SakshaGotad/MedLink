@@ -1,29 +1,27 @@
 const User = require('../models/user');
 const jwt= require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const signup =async(req, res)=>{
 
-    const newUser = req.body
-
-    return User.create(newUser)
-    .then(doc => {
-
-        delete doc._doc.password
-        return res.status(201).json({
-            message: "signup successful",
-            error: null,
-            data: doc
-         })
-    })
-    .catch(error => {
-        return res.status(422).json({
-            message: "signup failed",
-            error: error,
-            data: null
-         })
-    })
-
-}
+const signup = async (req, res) => {
+    try {
+      const { email, password, role } = req.body;
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const otpCode = Math.floor(100000 + Math.random() * 900000);
+  
+      await Otp.findOneAndUpdate(
+        { email },
+        { email, otp: otpCode, hashedPassword, role },
+        { upsert: true, new: true }
+      );
+  
+      await sendMail(email, 'MediLink OTP', `Your OTP is ${otpCode}`);
+  
+      return res.status(200).json({ message: 'OTP sent to email' });
+    } catch (error) {
+      return res.status(500).json({ error: 'Signup failed', details: error });
+    }
+  };
 
 const login= async ( req, res)=>{
     const { email, password, role } = req.body
