@@ -14,11 +14,11 @@ import {
 import clsx from 'clsx';
 
 const navItems = [
-  { label: 'Dashboard', href: '/patient', icon: LayoutDashboard },
-  { label: 'Book Appointment', href: '/patient/book', icon: CalendarCheck },
-  { label: 'History', href: '/patient/history', icon: ClipboardList },
-  { label: 'Reports', href: '/patient/reports', icon: FileText },
-  { label: 'Doctors', href: '/patient/doctors', icon: Stethoscope },
+  { label: 'Dashboard', href: '/dashboard/patient', icon: LayoutDashboard },
+  { label: 'Book Appointment', href: '/dashboard/patient/book', icon: CalendarCheck },
+  { label: 'History', href: '/dashboard/patient/history', icon: ClipboardList },
+  { label: 'Reports', href: '/dashboard/patient/reports', icon: FileText },
+  { label: 'Doctors', href: '/dashboard/patient/doctors', icon: Stethoscope },
 ];
 
 export default function Sidebar() {
@@ -34,7 +34,8 @@ export default function Sidebar() {
       {/* Nav Items */}
       <nav className="space-y-8">
         {navItems.map(({ label, href, icon: Icon }) => (
-          <Link
+          <Link 
+          key={href}
           href={href}
           className={clsx(
             'flex items-center gap-3 px-4 py-2 rounded-lg text-2xl font-medium transition-all duration-200',
