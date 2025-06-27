@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import Sidebar from "@/components/Sidebar";
 // import Navbar from "";
 
 const geistSans = Geist({
@@ -28,7 +29,8 @@ export default function DashboardLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div>dashboard header</div>
+        
+        <Sidebar/>
         {children}
       </body>
     </html>
