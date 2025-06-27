@@ -6,12 +6,14 @@ interface StatCardProps {
     value: string | number;
     subtitle?: string;
     icon?: ReactNode;
+    bgcolor:string;
   }
 
-export default function StatCard({ title, value, subtitle, icon }: StatCardProps) {
+export default function StatCard({ title, value, subtitle, icon, bgcolor }: StatCardProps) {
   return (
-    <div className='bg-white p-5 rounded-2xl shadow-sm flex flex-col gap-1 min-w-[200px]'>
-        <div className="flex items-center justify-between">
+    <div className='bg-white p-5 rounded-2xl shadow-sm flex flex-col gap-1 min-w-[200px]' 
+    style={{backgroundColor:bgcolor}}>
+        <div className="flex items-center justify-between bg">
         <h4 className="text-gray-700 font-medium">{title}</h4>
         {icon}
       </div>

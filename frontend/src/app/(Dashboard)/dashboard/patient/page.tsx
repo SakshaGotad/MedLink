@@ -19,19 +19,22 @@ export default function page() {
       title: 'Total Appointments',
       value: 8,
       subtitle: '3 upcoming',
-      icon: <CalendarCheck size={20} />,
+      bgcolor:'#f03f5a',
+      icon: <CalendarCheck size={50} />,
     },
     {
       title: 'Medical Reports',
       value: 0,
       subtitle: 'Uploaded documents',
-      icon: <FileText size={20} />,
+       bgcolor:'#19ba74fc',
+      icon: <FileText size={50} />,
     },
     {
       title: 'Available Doctors',
       value: 3,
       subtitle: 'Ready to help you',
-      icon: <Stethoscope size={20} />,
+       bgcolor:'#d7de17',
+      icon: <Stethoscope size={50} />,
     },
   ];
 
@@ -72,7 +75,7 @@ export default function page() {
         ))}
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions */} 
       <div className="bg-white p-6 rounded-xl shadow-sm">
         <h3 className="text-lg font-semibold mb-4 text-gray-700">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
