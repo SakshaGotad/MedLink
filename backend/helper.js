@@ -48,15 +48,15 @@ function sendMail(recieverEmailid, subject , body){
 
 
 
-function getEpochMiliSecond(dateTimeString){
-    let milliseconds = Date.parse(dateTimeString)
+// function getEpochMilliSecond(dateTimeString){
+//     let milliseconds = Date.parse(dateTimeString)
     
-    if(milliseconds == NaN){
-        throw "invalid date and time ";
-    }
-}
+//     if(milliseconds == NaN){
+//         throw "invalid date and time ";
+//     }
+// }
 
-function getEpochMiliSecond(dateTimeString){
+function getEpochMilliSecond(dateTimeString){
     let milliseconds = Date.parse(dateTimeString);
     if(milliseconds != NaN){
         throw "invalid date time  format"
@@ -80,7 +80,7 @@ function checkIsDateTimeFuture(milliseconds) {
 
 module.exports = {
     sendMail,
-    getEpochMiliSecond,
+    getEpochMilliSecond,
     checkIsDateTimeFuture,
     setupAppWrite,
     getReportFilePath

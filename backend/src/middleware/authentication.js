@@ -2,10 +2,15 @@ const jwt = require("jsonwebtoken")
 
 function verifyAccessToken(req, res, next) {
     try {
-        if(req.headers.authorization == null) {
+        const authHeader = req.headers.authorization;
+        //  console.log(authHeader)
+        if(authHeader == null) {
             throw "invalid access"
-        }
-        const verifiedData = jwt.verify(req.headers.authorization, process.env.SECRET)
+        } 
+        const token = authHeader.split(" ")[1];
+        // console.log(token)
+        const verifiedData = jwt.verify(token, process.env.SECRET_KEY)
+        // console.log("verified data",verifiedData)
         console.log("verify : ", verifiedData)
 
         req.userEmail = verifiedData.email 
@@ -23,15 +28,18 @@ function verifyAccessToken(req, res, next) {
 
 function checkIsPatient(req, res, next) {
     try {
-        if(req.userRole != patient){
+        // console.log(object)
+        if(req.userRole !== "patient"){
             res.json({message:"not a patient"})
         }
+        next();
     } catch (error) {
         return res.status(400)
         .json({
             message:"error in patient middleware"
         })
     }
+  
 }
 
 module.exports = {

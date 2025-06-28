@@ -1,6 +1,6 @@
 
 const Appointment = require('../models/appointment');
-
+const{getEpochMilliSecond,checkIsDateTimeFuture} = require('../../helper')
 const createAppointment = async(req, res)=>{
     try {
         const newAppointment = req.body
@@ -11,7 +11,7 @@ const createAppointment = async(req, res)=>{
             throw "invalid date time"
         }
     })
-    .then(() => getEpochMilliSeconds(newAppointment.dateTime))
+    .then(() => getEpochMilliSecond(newAppointment.dateTime))
     .then((milliseconds) => checkIsDateTimeFuture(milliseconds))
     .then((milliseconds) => { 
         newAppointment.dateTime = milliseconds
@@ -22,7 +22,9 @@ const createAppointment = async(req, res)=>{
             message: "appointment create successful",
             error: null,
             data: { ...doc._doc }
-         })
+         
+        })
+
     })
     .catch(error => {
         console.log("===error : ", error)

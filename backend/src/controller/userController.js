@@ -1,4 +1,4 @@
-const user = require('../models/user')
+const User = require('../models/user')
 // const User = require('../models/user')
 const fetchUserdata = async (req,res) =>{
     return User.findOne({ email: req.userEmail, role: req.userRole })
@@ -86,7 +86,7 @@ const deleteUser = async(req, res)=>{
 
 const getallDoctors = async(req, res)=>{
     try {
-        const doctor = await user.findOne({role:"doctor"});
+        const doctor = await User.findOne({role:"doctor"});
 
         return res.status(200)
         .json({_id: doctor._id,
@@ -102,7 +102,8 @@ const getallDoctors = async(req, res)=>{
 module.exports ={
     fetchUserdata ,
     updateUser,
-    deleteUser
+    deleteUser,
+    getallDoctors
 }
 
 

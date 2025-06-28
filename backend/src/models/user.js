@@ -55,33 +55,19 @@ userSchema.index({ email: 1, role: 1 })  // indexing applied
 
 // mongodb Hooks  
 
-userSchema.pre("save", function () {
-    return Promise.resolve()
-    .then(() => {
-        return bcrypt.genSalt()
-    })
-    .then((salt) => {
-        return bcrypt.hash(this.password, salt)
-    })
-    .then((hashedPassword) => {
-        this.password = hashedPassword
-    })
-    .catch(error => {
-        console.log("password hashing error: ", error)
-    })
-})
 
-userSchema.post("save", function() {
-    return OtpModel.create({
-        email: this.email,
-        otp: null
-    })
-})
 
-userSchema.post("findOneAndDelete", function() {
-    // TODO: revisit the logic here
-    console.log("HERE : ", this)
-    return OtpModel.deleteOne({ email: this.email })
-})
+// userSchema.post("save", function() {
+//     return OtpModel.create({
+//         email: this.email,
+//         otp: null
+//     })
+// })
+
+// userSchema.post("findOneAndDelete", function() {
+//     // TODO: revisit the logic here
+//     console.log("HERE : ", this)
+//     return OtpModel.deleteOne({ email: this.email })
+// })
 
 module.exports = mongoose.model("User", userSchema)

@@ -2,17 +2,20 @@ const User = require('../models/user');
 const  Otp = require('../models/emailOtpVerification')
 const jwt= require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
+const {sendMail} = require('../../helper')
 const signup = async (req, res) => {
     try {
-      const { email, password, role } = req.body;
-  
+      const { name, email, password, role } = req.body;
+      
+      // console.log("body",req.body)
       const hashedPassword = await bcrypt.hash(password, 10);
+      // console.log("hashpass",hashedPassword);
       const otpCode = Math.floor(100000 + Math.random() * 900000);
-  
+      console.log("otp",otpCode);
+     
       await Otp.findOneAndUpdate(
         { email },
-        { email, otp: otpCode, hashedPassword, role },
+        { email, otp: otpCode, hashedPassword, role,name },
         { upsert: true, new: true }
       );
   
@@ -20,6 +23,7 @@ const signup = async (req, res) => {
   
       return res.status(200).json({ message: 'OTP sent to email' });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({ error: 'Signup failed', details: error });
     }
   };
@@ -34,6 +38,7 @@ const signup = async (req, res) => {
       }
   
       const newUser = await User.create({
+        name: otpDoc.name,
         email,
         password: otpDoc.hashedPassword,
         role: otpDoc.role,
@@ -49,13 +54,14 @@ const signup = async (req, res) => {
   };
 
 const login= async ( req, res)=>{
-    const { email, password, role } = req.body
+    const { email, password, role } = req.body;
+    console.log(req.body);
     let foundDoc = null
 
     return User.findOne({ email, role })
     .then(doc => {
         foundDoc = doc
-
+        console.log(foundDoc);
         if (doc == null) {
             throw "user not found"
         }
@@ -72,7 +78,7 @@ const login= async ( req, res)=>{
             role: foundDoc.role
         }
 
-        const token = jwt.sign(payload, process.env.SECRET, {
+        const token = jwt.sign(payload, process.env.SECRET_KEY, {
             expiresIn: '1h'
         })
 
@@ -119,75 +125,77 @@ const logout = async (req, res)=>{
 }
 
 
-const emailVerifyReq = async(req, res) =>{
-    return User.findOne({ email: req.userEmail, role: req.userRole })
-    .then(doc => {
-        if(doc.verifiedEmail) {
-            throw "email already verified"
-        }
+// const emailVerifyReq = async(req, res) =>{
+//     return User.findOne({ email: req.userEmail, role: req.userRole })
+//     .then(doc => {
+//         if(doc.verifiedEmail) {
+//             throw "email already verified"
+//         }
 
-        const newOtp = Math.ceil(Math.random() * 1000000)
+//         const newOtp = Math.ceil(Math.random() * 1000000)
 
-        return OtpModel.findOneAndUpdate({ email: req.userEmail }, { otp: newOtp }, { new: true })
-    })
-    .then(otpDoc => {
+//         return OtpModel.findOneAndUpdate({ email: req.userEmail }, { otp: newOtp }, { new: true })
+//     })
+//     .then(otpDoc => {
 
-        return sendMail(
-            req.userEmail, 
-            "MediLink: OTP for email verification",
-            "Your OTP is " + otpDoc.otp
-        )
-    })
-    .then(() => {
-        return res.status(200).json({
-            message: "verification request sent successful",
-            error: null,
-            data: null
-         })
-    })
-    .catch(error => {
-        console.log("error: ", error)
-        return res.status(403).json({
-            message: "verification request failed",
-            error: error,
-            data: null
-         })
-    })
-}
+//         return sendMail(
+//             req.userEmail, 
+//             "MediLink: OTP for email verification",
+//             "Your OTP is " + otpDoc.otp
+//         )
+//     })
+//     .then(() => {
+//         return res.status(200).json({
+//             message: "verification request sent successful",
+//             error: null,
+//             data: null
+//          })
+//     })
+//     .catch(error => {
+//         console.log("error: ", error)
+//         return res.status(403).json({
+//             message: "verification request failed",
+//             error: error,
+//             data: null
+//          })
+//     })
+// }
 
-const emailVerifySubmit = async(req, res)=>{
-    return User.findOne({ email: req.userEmail, role: req.userRole })
-    .then(doc => {
-        if(doc.verifiedEmail) {
-            throw "email already verified"
-        }
+// const emailVerifySubmit = async(req, res)=>{
+//     return User.findOne({ email: req.userEmail, role: req.userRole })
+//     .then(doc => {
+//         if(doc.verifiedEmail) {
+//             throw "email already verified"
+//         }
 
-        return OtpModel.findOne({ email: req.userEmail })
-    })
-    .then(otpDoc => {
+//         return OtpModel.findOne({ email: req.userEmail })
+//     })
+//     .then(otpDoc => {
 
-        if(otpDoc.otp != req.body.otp) {
-            throw "invalid otp"
-        }
+//         if(otpDoc.otp != req.body.otp) {
+//             throw "invalid otp"
+//         }
 
-        return User.findOneAndUpdate({ email: req.userEmail, role: req.userRole }, { verifiedEmail: true }, { new: true })
-    })
-    .then(userDoc => {
-        delete userDoc._doc.password
+//         return User.findOneAndUpdate({ email: req.userEmail, role: req.userRole }, { verifiedEmail: true }, { new: true })
+//     })
+//     .then(userDoc => {
+//         delete userDoc._doc.password
 
-        return res.status(200).json({
-            message: "verification successful",
-            error: null,
-            data: userDoc
-         })
-    })
-    .catch(error => {
-        console.log("error: ", error)
-        return res.status(403).json({
-            message: "verification failed",
-            error: error,
-            data: null
-         })
-    })
-}
-module.exports ={signup,verifyOtp, login , logout , emailVerifyReq , emailVerifySubmit}
+//         return res.status(200).json({
+//             message: "verification successful",
+//             error: null,
+//             data: userDoc
+//          })
+//     })
+//     .catch(error => {
+//         console.log("error: ", error)
+//         return res.status(403).json({
+//             message: "verification failed",
+//             error: error,
+//             data: null
+//          })
+//     })
+// }
+
+
+module.exports ={signup,verifyOtp, login , logout }
