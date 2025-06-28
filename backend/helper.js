@@ -57,12 +57,15 @@ function sendMail(recieverEmailid, subject , body){
 // }
 
 function getEpochMilliSecond(dateTimeString){
-    let milliseconds = Date.parse(dateTimeString);
-    if(milliseconds != NaN){
-        throw "invalid date time  format"
-    }
-    return milliseconds
+  const milliseconds = Date.parse(dateTimeString);
+
+  if (isNaN(milliseconds)) {
+      throw "invalid date time format";
+  }
+
+  return milliseconds;
 }
+
 
 function checkIsDateTimeFuture(milliseconds) {
     let currentMilliSeconds = Date.now()

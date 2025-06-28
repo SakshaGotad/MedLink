@@ -4,14 +4,17 @@ const{getEpochMilliSecond,checkIsDateTimeFuture} = require('../../helper')
 const createAppointment = async(req, res)=>{
     try {
         const newAppointment = req.body
-          
+        console.log("date1",newAppointment.date);
+        console.log("date2",newAppointment.dateTime)
+        
+          console.log("appointment data",newAppointment);
         return Promise.resolve()
     .then(() => {
-        if(!newAppointment.dateTime) {
+        if(!newAppointment.date) {
             throw "invalid date time"
         }
     })
-    .then(() => getEpochMilliSecond(newAppointment.dateTime))
+    .then(() => getEpochMilliSecond(newAppointment.date))
     .then((milliseconds) => checkIsDateTimeFuture(milliseconds))
     .then((milliseconds) => { 
         newAppointment.dateTime = milliseconds
